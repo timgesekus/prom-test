@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cicis-dummy.fullname" . }}
+  labels:
+    operated-prometheus: "true"
+    {{- include "cicis-dummy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "cicis-dummy.selectorLabels" . | nindent 4 }}

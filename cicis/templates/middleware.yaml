@@ -1,0 +1,8 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware    # Eine CRD von traefik, die spaeter zum rewrite der URLs genutzt wird
+metadata:
+  name: strip-data-path
+spec:
+  stripPrefix:
+    prefixes:
+      - /cicis

@@ -1,0 +1,59 @@
+grafana:
+  ingress:
+    enabled: true
+    annotations: {
+        kubernetes.io/ingress.class: "traefik",
+        traefik.ingress.kubernetes.io/router.middlewares: "default-strip-data-path@kubernetescrd" 
+    }
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+
+    ## Labels to be added to the Ingress
+    ##
+    labels: {}
+
+    ## Hostnames.
+    ## Must be provided if Ingress is enable.
+    ##
+    # hosts:
+    #   - grafana.domain.com
+    hosts: [localhost]
+
+    ## Path for grafana ingress
+    path: /grafana
+  grafana.ini:
+    server:
+      domain: localhost
+      root_url: "%(protocol)s://%(domain)s/grafana"
+      serve_from_sub_path: true
+
+prometheus:
+  ingress:
+    enabled: true
+
+    # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+    # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+    # ingressClassName: nginx
+
+    annotations: {
+      kubernetes.io/ingress.class: "traefik",
+      traefik.ingress.kubernetes.io/router.middlewares: "default-strip-data-path@kubernetescrd" 
+    }
+    labels: {}
+
+    ## Redirect ingress to an additional defined port on the service
+    # servicePort: 8081
+
+    ## Hostnames.
+    ## Must be provided if Ingress is enabled.
+    ##
+    # hosts:
+    #   - prometheus.domain.com
+    hosts: [localhost]
+
+    ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
+    ##
+    paths: [/prometheus]
+    # - /
+  prometheusSpec:
+    routePrefix: /prometheus
