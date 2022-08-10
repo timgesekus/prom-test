@@ -1,18 +1,18 @@
-# Default values for cicis.
+# Default values for cicis-process-2.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: timgesekus/prom-dummy
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
-nameOverride: "cicis"
-fullnameOverride: "cicis-mock"
+nameOverride: ""
+fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -38,24 +38,19 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 2112 
 
 ingress:
-  enabled: true
-  annotations: {
-    kubernetes.io/ingress.class: "traefik",
-    traefik.ingress.kubernetes.io/router.middlewares: "default-strip-data-path@kubernetescrd" 
-  }
+  enabled: false
+  className: ""
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: localhost
+    - host: chart-example.local
       paths:
-      - path: /cicis
-        pathType: Prefix
-        backend:
-          serviceName: chart-example.local
-          servicePort: 80
+        - path: /
+          pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
